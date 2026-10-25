@@ -24,7 +24,7 @@ local WHITELIST_USERNAMES = {
 -- Add the real numeric UserId(s) here for maximum security.
 -- Example: [123456789] = true,
 local WHITELIST_USERIDS = {
-    -- ["martinique4512"]'s UserId goes here, e.g. [1234567890] = true,
+    -- ["jasdksjdskj"]'s UserId goes here, e.g. [1234567890] = true,
 }
 
 -- Behavior when the user is not whitelisted:
