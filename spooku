@@ -37,7 +37,7 @@ local KICK_MESSAGE = "You are not whitelisted to use this script."
 
 -- Optional: notification title (shown briefly before the kick).
 local NOTIFY_TITLE = "Project Spooky"
-local NOTIFY_TEXT  = "Access denied: You are not whitelisted."
+local NOTIFY_TEXT  = "You have been banned for using exploits if u wish to apeal please join discord.gg/martinthoughtnigger."
 
 -- ============================================================
 -- CORE LOGIC
