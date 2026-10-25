@@ -33,11 +33,11 @@ local WHITELIST_USERIDS = {
 local ENFORCEMENT_MODE = "kick"
 
 -- Kick reason shown to unauthorized users.
-local KICK_MESSAGE = "You are not whitelisted to use this script."
+local KICK_MESSAGE = "You have been banned for using exploits if u wish to apeal please join discord.gg/martinthoughtnigger."
 
 -- Optional: notification title (shown briefly before the kick).
 local NOTIFY_TITLE = "Project Spooky"
-local NOTIFY_TEXT  = "You have been banned for using exploits if u wish to apeal please join discord.gg/martinthoughtnigger."
+local NOTIFY_TEXT  = "You have been banned for using exploits if u wish to apeal please join discord.gg/martinthoughtnigger"
 
 -- ============================================================
 -- CORE LOGIC
