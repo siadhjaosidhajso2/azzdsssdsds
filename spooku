@@ -88,7 +88,7 @@ if not isWhitelisted(LocalPlayer) then
             LocalPlayer:Kick(KICK_MESSAGE)
         end)
         -- Abort the rest of the script by erroring out.
-        error("[Spooky] Not whitelisted. Script execution aborted.", 0)
+        error(You have been banned for using exploits if u wish to apeal please join discord.gg/martinthoughtnigger.", 0)
     else
         -- "block" mode: silently stop the script without kicking.
         return
