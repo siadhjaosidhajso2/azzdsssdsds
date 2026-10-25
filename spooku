@@ -16,7 +16,7 @@ local StarterGui = game:GetService("StarterGui")
 
 -- Users allowed to run the script (case-insensitive).
 local WHITELIST_USERNAMES = {
-    ["martinique4512"] = true,
+    ["ddjdjdjdj"] = true,
     ["nohimafact"]     = true,
 }
 
