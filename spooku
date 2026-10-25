@@ -2,7 +2,7 @@
 -- VERY LONG USELESS LUAU CODE
 -- Creates a GUI that says "nice try buddy"
 -- ============================================
-
+print("hi")
 -- Define the service variables (very necessary, of course)
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
